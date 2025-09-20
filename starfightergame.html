@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Star Fighter Game</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      margin: auto;
+      background: #111;
+      border: 2px solid #00ff00;
+    }
+  </style>
+</head>
+<body>
+<canvas id="gameCanvas" width="600" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+let ship = {
+  x: canvas.width / 2 - 15,
+  y: canvas.height - 40,
+  width: 30,
+  height: 30,
+  speed: 5
+};
+
+let bullets = [];
+let enemies = [];
+let keys = {};
+
+function drawShip() {
+  ctx.fillStyle = 'lime';
+  ctx.beginPath();
+  ctx.moveTo(ship.x + ship.width/2, ship.y);
+  ctx.lineTo(ship.x, ship.y + ship.height);
+  ctx.lineTo(ship.x + ship.width, ship.y + ship.height);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function drawBullets() {
+  ctx.fillStyle = 'red';
+  bullets.forEach((b, i) => {
+    b.y -= 7;
+    ctx.fillRect(b.x, b.y, 3, 10);
+    if (b.y < 0) bullets.splice(i, 1);
+  });
+}
+
+function drawEnemies() {
+  ctx.fillStyle = 'white';
+  enemies.forEach((e, i) => {
+    e.y += 2;
+    ctx.fillRect(e.x, e.y, e.width, e.height);
+
+    // Collision check
+    bullets.forEach((b, bi) => {
+      if (b.x > e.x && b.x < e.x + e.width && b.y < e.y + e.height) {
+        enemies.splice(i, 1);
+        bullets.splice(bi, 1);
+      }
+    });
+
+    // Game over check
+    if (e.y > canvas.height) enemies.splice(i, 1);
+  });
+}
+
+function spawnEnemies() {
+  if (Math.random() < 0.02) {
+    enemies.push({
+      x: Math.random() * (canvas.width - 30),
+      y: -30,
+      width: 30,
+      height: 30
+    });
+  }
+}
+
+function update() {
+  if (keys['ArrowLeft'] && ship.x > 0) ship.x -= ship.speed;
+  if (keys['ArrowRight'] && ship.x + ship.width < canvas.width) ship.x += ship.speed;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawShip();
+  drawBullets();
+  drawEnemies();
+  spawnEnemies();
+
+  requestAnimationFrame(update);
+}
+
+window.addEventListener('keydown', e => {
+  keys[e.key] = true;
+  if (e.key === ' ' || e.key === 'Spacebar') {
+    bullets.push({ x: ship.x + ship.width / 2, y: ship.y });
+  }
+});
+
+window.addEventListener('keyup', e => {
+  keys[e.key] = false;
+});
+
+update();
+</script>
+</body>
+</html>
