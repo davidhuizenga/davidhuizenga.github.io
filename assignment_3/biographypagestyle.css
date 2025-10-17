@@ -11,6 +11,12 @@ body {
 
 }
 
+.job-title {
+  color: darkslategray;
+  font-weight: bold;
+}
+
+
 h1 {
   color: darkslategray;
   border-bottom: 10px dotted purple;
@@ -28,4 +34,14 @@ ul {
   border: 5px solid purple;
   padding: 30px;
   border-radius: 20px;
+}
+
+a {
+  color: green;
+}
+
+a:hover,
+a:focus {
+  color: darkgreen;
+  text-decoration: none;
 }
