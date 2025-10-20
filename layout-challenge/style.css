@@ -60,6 +60,12 @@ nav a {
 
 nav a:hover, nav a:focus { text-decoration: underline; }
 
+/* Feature image with text wrapping */
+.feature {
+  float: left;                    
+  width: min(40%, 260px);           
+  margin: 0 1rem 1rem 0;             
+
 .photos {
   list-style: none;
   margin: 0;
