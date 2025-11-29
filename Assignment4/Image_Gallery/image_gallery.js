@@ -36,3 +36,10 @@ for (const image of images) {
     }
   });
 }
+
+// updatedisplayimage
+
+function updateDisplayedImage(e) {
+  displayedImage.src = e.target.src;
+  displayedImage.alt = e.target.alt;
+}
