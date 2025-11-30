@@ -78,6 +78,81 @@ class Ball {
   }
   // …
 }
+
+// ---------- EvilCircle class ----------
+class EvilCircle extends Shape {
+  constructor(x, y, exists = true) {
+    super(x, y, 20, 20, exists); // fast movement
+    this.color = "white";
+    this.size = 20;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = this.color;
+    ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+    ctx.stroke();
+  }
+
+  checkBounds() {
+    if (this.x + this.size >= width) {
+      this.x = width - this.size;
+    }
+
+    if (this.x - this.size <= 0) {
+      this.x = this.size;
+    }
+
+    if (this.y + this.size >= height) {
+      this.y = height - this.size;
+    }
+
+    if (this.y - this.size <= 0) {
+      this.y = this.size;
+    }
+  }
+
+  setControls() {
+    window.addEventListener("keydown", (e) => {
+      switch (e.key) {
+        case "a":
+        case "ArrowLeft":
+          this.x -= this.velX;
+          break;
+        case "d":
+        case "ArrowRight":
+          this.x += this.velX;
+          break;
+        case "w":
+        case "ArrowUp":
+          this.y -= this.velY;
+          break;
+        case "s":
+        case "ArrowDown":
+          this.y += this.velY;
+          break;
+      }
+    });
+  }
+
+  collisionDetect() {
+    for (const ball of balls) {
+      if (ball.exists) {
+        const dx = this.x - ball.x;
+        const dy = this.y - ball.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < this.size + ball.size) {
+          ball.exists = false;
+          ballCount--;
+          para.textContent = `Ball count: ${ballCount}`;
+        }
+      }
+    }
+  }
+}
+
 const balls = [];
 
 while (balls.length < 25) {
